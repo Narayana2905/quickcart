@@ -12,5 +12,5 @@ import lombok.Setter;
 public class ProductImageResponse {
     private Long id;
     private String imageUrl;
-    private boolean primary;
+    private boolean primaryImg;
 }

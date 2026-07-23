@@ -16,6 +16,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByActiveTrue();
     boolean existsByCategoryId(Long categoryId);
     boolean existsByBrandId(Long brandId);
-    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    List<Product> searchByName(@Param("keyword") String keyword);
+    @Query("""
+        SELECT p
+        FROM Product p
+        LEFT JOIN p.category c
+        WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+           OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+    """)
+    List<Product> searchByNameOrCategoryName(@Param("keyword") String keyword);
 }

@@ -11,5 +11,5 @@ public class ProductImageRequest {
     @NotBlank(message = "Image URL is required")
     private String imageUrl;
 
-    private boolean primary;
+    private boolean primaryImg;
 }

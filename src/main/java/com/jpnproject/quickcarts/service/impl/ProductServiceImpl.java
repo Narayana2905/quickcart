@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> search(String keyword) {
-        return productRepository.searchByName(keyword).stream().map(this::toResponse).toList();
+        return productRepository.searchByNameOrCategoryName(keyword).stream().map(this::toResponse).toList();
     }
 
     @Override

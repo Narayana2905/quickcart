@@ -12,6 +12,7 @@ import com.jpnproject.quickcarts.repository.DarkStoreRepository;
 import com.jpnproject.quickcarts.repository.InventoryRepository;
 import com.jpnproject.quickcarts.repository.ProductVariantRepository;
 import com.jpnproject.quickcarts.service.InventoryService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

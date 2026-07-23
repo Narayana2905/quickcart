@@ -29,26 +29,22 @@ CREATE TABLE app_users (
     phone VARCHAR(10) NOT NULL UNIQUE,
     role VARCHAR(20) NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50)
 );
-
 
 CREATE TABLE brands (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     logo_url VARCHAR(255),
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50)
 );
-
 
 CREATE TABLE categories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -56,17 +52,12 @@ CREATE TABLE categories (
     image_url VARCHAR(255),
     parent_id BIGINT,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_category_parent
-        FOREIGN KEY (parent_id)
-        REFERENCES categories(id)
+    CONSTRAINT fk_category_parent FOREIGN KEY (parent_id) REFERENCES categories(id)
 );
-
 
 CREATE TABLE dark_stores (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -78,13 +69,11 @@ CREATE TABLE dark_stores (
     opening_time TIME NOT NULL,
     closing_time TIME NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50)
 );
-
 
 CREATE TABLE coupons (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -97,13 +86,11 @@ CREATE TABLE coupons (
     usage_limit INT NOT NULL,
     used_count INT DEFAULT 0,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50)
 );
-
 
 CREATE TABLE addresses (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -115,17 +102,12 @@ CREATE TABLE addresses (
     latitude DOUBLE NOT NULL,
     longitude DOUBLE NOT NULL,
     is_default BOOLEAN DEFAULT FALSE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_address_user
-        FOREIGN KEY (user_id)
-        REFERENCES app_users(id)
+    CONSTRAINT fk_address_user FOREIGN KEY (user_id) REFERENCES app_users(id)
 );
-
 
 CREATE TABLE products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -138,21 +120,13 @@ CREATE TABLE products (
     category_id BIGINT NOT NULL,
     brand_id BIGINT,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_product_category
-        FOREIGN KEY (category_id)
-        REFERENCES categories(id),
-
-    CONSTRAINT fk_product_brand
-        FOREIGN KEY (brand_id)
-        REFERENCES brands(id)
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES categories(id),
+    CONSTRAINT fk_product_brand FOREIGN KEY (brand_id) REFERENCES brands(id)
 );
-
 
 CREATE TABLE riders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -164,17 +138,12 @@ CREATE TABLE riders (
     current_latitude DOUBLE,
     current_longitude DOUBLE,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_rider_store
-        FOREIGN KEY (dark_store_id)
-        REFERENCES dark_stores(id)
+    CONSTRAINT fk_rider_store FOREIGN KEY (dark_store_id) REFERENCES dark_stores(id)
 );
-
 
 CREATE TABLE product_variants (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -182,34 +151,24 @@ CREATE TABLE product_variants (
     price DECIMAL(10,2) NOT NULL,
     product_id BIGINT NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_variant_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(id)
+    CONSTRAINT fk_variant_product FOREIGN KEY (product_id) REFERENCES products(id)
 );
-
 
 CREATE TABLE product_images (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     image_url VARCHAR(255) NOT NULL,
-    primary_ BOOLEAN DEFAULT FALSE,
+    primary_img BOOLEAN DEFAULT FALSE,
     product_id BIGINT NOT NULL,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_image_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(id)
+    CONSTRAINT fk_image_product FOREIGN KEY (product_id) REFERENCES products(id)
 );
-
 
 CREATE TABLE product_reviews (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -217,47 +176,27 @@ CREATE TABLE product_reviews (
     user_id BIGINT NOT NULL,
     rating INT NOT NULL,
     comment VARCHAR(500),
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT uq_review_product_user
-        UNIQUE (product_id, user_id),
-
-    CONSTRAINT fk_review_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(id),
-
-    CONSTRAINT fk_review_user
-        FOREIGN KEY (user_id)
-        REFERENCES app_users(id)
+    CONSTRAINT uq_review_product_user UNIQUE (product_id, user_id),
+    CONSTRAINT fk_review_product FOREIGN KEY (product_id) REFERENCES products(id),
+    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES app_users(id)
 );
-
 
 CREATE TABLE wishlists (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT uq_wishlist_user_product
-        UNIQUE (user_id, product_id),
-
-    CONSTRAINT fk_wishlist_user
-        FOREIGN KEY (user_id)
-        REFERENCES app_users(id),
-
-    CONSTRAINT fk_wishlist_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(id)
+    CONSTRAINT uq_wishlist_user_product UNIQUE (user_id, product_id),
+    CONSTRAINT fk_wishlist_user FOREIGN KEY (user_id) REFERENCES app_users(id),
+    CONSTRAINT fk_wishlist_product FOREIGN KEY (product_id) REFERENCES products(id)
 );
-
 
 CREATE TABLE inventory (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -266,85 +205,52 @@ CREATE TABLE inventory (
     available_quantity INT NOT NULL,
     reserved_quantity INT DEFAULT 0,
     low_stock_threshold INT DEFAULT 10,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT uq_store_variant
-        UNIQUE (dark_store_id, product_variant_id),
-
-    CONSTRAINT fk_inventory_store
-        FOREIGN KEY (dark_store_id)
-        REFERENCES dark_stores(id),
-
-    CONSTRAINT fk_inventory_variant
-        FOREIGN KEY (product_variant_id)
-        REFERENCES product_variants(id)
+    CONSTRAINT uq_store_variant UNIQUE (dark_store_id, product_variant_id),
+    CONSTRAINT fk_inventory_store FOREIGN KEY (dark_store_id) REFERENCES dark_stores(id),
+    CONSTRAINT fk_inventory_variant FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
 );
-
 
 CREATE TABLE store_service_zones (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     dark_store_id BIGINT NOT NULL,
     pincode VARCHAR(6) NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_zone_store
-        FOREIGN KEY (dark_store_id)
-        REFERENCES dark_stores(id)
+    CONSTRAINT fk_zone_store FOREIGN KEY (dark_store_id) REFERENCES dark_stores(id)
 );
-
 
 CREATE TABLE carts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     dark_store_id BIGINT,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_cart_user
-        FOREIGN KEY (user_id)
-        REFERENCES app_users(id),
-
-    CONSTRAINT fk_cart_store
-        FOREIGN KEY (dark_store_id)
-        REFERENCES dark_stores(id)
+    CONSTRAINT fk_cart_user FOREIGN KEY (user_id) REFERENCES app_users(id),
+    CONSTRAINT fk_cart_store FOREIGN KEY (dark_store_id) REFERENCES dark_stores(id)
 );
-
 
 CREATE TABLE cart_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     cart_id BIGINT NOT NULL,
     product_variant_id BIGINT NOT NULL,
     quantity INT NOT NULL,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT uq_cart_variant
-        UNIQUE (cart_id, product_variant_id),
-
-    CONSTRAINT fk_cartitem_cart
-        FOREIGN KEY (cart_id)
-        REFERENCES carts(id),
-
-    CONSTRAINT fk_cartitem_variant
-        FOREIGN KEY (product_variant_id)
-        REFERENCES product_variants(id)
+    CONSTRAINT uq_cart_variant UNIQUE (cart_id, product_variant_id),
+    CONSTRAINT fk_cartitem_cart FOREIGN KEY (cart_id) REFERENCES carts(id),
+    CONSTRAINT fk_cartitem_variant FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
 );
-
 
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -358,25 +264,14 @@ CREATE TABLE orders (
     coupon_code VARCHAR(30),
     status VARCHAR(20) NOT NULL,
     cancellation_reason VARCHAR(255),
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_order_user
-        FOREIGN KEY (user_id)
-        REFERENCES app_users(id),
-
-    CONSTRAINT fk_order_store
-        FOREIGN KEY (dark_store_id)
-        REFERENCES dark_stores(id),
-
-    CONSTRAINT fk_order_coupon
-        FOREIGN KEY (coupon_code)
-        REFERENCES coupons(code)
+    CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES app_users(id),
+    CONSTRAINT fk_order_store FOREIGN KEY (dark_store_id) REFERENCES dark_stores(id),
+    CONSTRAINT fk_order_coupon FOREIGN KEY (coupon_code) REFERENCES coupons(code)
 );
-
 
 CREATE TABLE order_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -385,21 +280,13 @@ CREATE TABLE order_items (
     product_name VARCHAR(200) NOT NULL,
     price_at_purchase DECIMAL(10,2) NOT NULL,
     quantity INT NOT NULL,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_orderitem_order
-        FOREIGN KEY (order_id)
-        REFERENCES orders(id),
-
-    CONSTRAINT fk_orderitem_variant
-        FOREIGN KEY (product_variant_id)
-        REFERENCES product_variants(id)
+    CONSTRAINT fk_orderitem_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_orderitem_variant FOREIGN KEY (product_variant_id) REFERENCES product_variants(id)
 );
-
 
 CREATE TABLE payments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -409,17 +296,12 @@ CREATE TABLE payments (
     status VARCHAR(20) NOT NULL,
     gateway_transaction_id VARCHAR(100),
     failure_reason VARCHAR(255),
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_payment_order
-        FOREIGN KEY (order_id)
-        REFERENCES orders(id)
+    CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(id)
 );
-
 
 CREATE TABLE refunds (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -427,17 +309,12 @@ CREATE TABLE refunds (
     amount DECIMAL(10,2) NOT NULL,
     reason VARCHAR(255) NOT NULL,
     status VARCHAR(20) NOT NULL,
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_refund_payment
-        FOREIGN KEY (payment_id)
-        REFERENCES payments(id)
+    CONSTRAINT fk_refund_payment FOREIGN KEY (payment_id) REFERENCES payments(id)
 );
-
 
 CREATE TABLE delivery_assignments (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -447,17 +324,10 @@ CREATE TABLE delivery_assignments (
     picked_up_at TIMESTAMP,
     delivered_at TIMESTAMP,
     failure_reason VARCHAR(255),
-
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     created_by VARCHAR(50),
     updated_by VARCHAR(50),
-
-    CONSTRAINT fk_da_order
-        FOREIGN KEY (order_id)
-        REFERENCES orders(id),
-
-    CONSTRAINT fk_da_rider
-        FOREIGN KEY (rider_id)
-        REFERENCES riders(id)
+    CONSTRAINT fk_da_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_da_rider FOREIGN KEY (rider_id) REFERENCES riders(id)
 );

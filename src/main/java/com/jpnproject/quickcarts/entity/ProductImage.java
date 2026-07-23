@@ -19,7 +19,7 @@ public class ProductImage extends BaseEntity {
     @NotBlank(message = "Image URL is required")
     private String imageUrl;
 
-    private boolean primary = false;
+    private boolean primaryImg = false;
 
     @NotNull(message = "Product is required")
     @ManyToOne(fetch = FetchType.LAZY)
