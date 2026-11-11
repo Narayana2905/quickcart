@@ -36,8 +36,8 @@ export function buildCart(userId) {
   const subtotal = round2(purchasable.reduce((sum, l) => sum + l.lineTotal, 0));
   const itemCount = purchasable.reduce((sum, l) => sum + l.quantity, 0);
   // Empty cart => 0.00. Otherwise 25.00 below 200.00, free from 200.00.
-  // OPEN QUESTION (Backend): cart with ONLY unavailable lines. Read literally => 25.00.
-  const deliveryFee = items.length === 0 ? 0 : subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
+  // Confirmed against the real backend: nothing purchasable => fee 0.00
+  const deliveryFee = itemCount === 0 ? 0 : subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   return {
     items,
     itemCount,

@@ -79,9 +79,9 @@ export const orderHandlers = [
     }
     const unavailable = cart.items.filter((l) => !l.available);
     if (unavailable.length > 0) {
-      return apiError(request, 409, 'PRODUCT_UNAVAILABLE', 'Some items in your cart are no longer available.',
-        unavailable.map((l) => ({ field: `productId:${l.productId}`, message: 'Currently unavailable' })));
-    }
+            return apiError(request, 409, 'PRODUCT_UNAVAILABLE', 'Some items in your cart are unavailable. Remove them to continue.',
+        unavailable.map((l) => ({ field: `productId:${l.productId}`, message: 'No longer available in the requested quantity' })));
+      }
 
     if (raceControl.productId !== null) {
       db.setStock(raceControl.productId, 0); // someone else got there first

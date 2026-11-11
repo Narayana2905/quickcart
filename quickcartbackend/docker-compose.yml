@@ -136,5 +136,16 @@ services:
       timeout: 3s
       retries: 12
       start_period: 60s
+    # ...after api-gateway, still inside `services:`
+  frontend:
+    build:
+      context: ../quickcartfrontend
+      args:
+        VITE_API_BASE_URL: ""
+    ports:
+      - "3000:80"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
 volumes:
   pgdata:

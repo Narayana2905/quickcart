@@ -48,7 +48,7 @@ function AdminOrderDetailContent({ id }) {
 
   const applyStatus = (status) =>
     run(async () => {
-      setActionError('');
+              setActionError(code === 'INVALID_STATUS_TRANSITION' ? message : messageWithDetails({ message, fieldErrors }));
       setNotice('');
       setRetryStatus(null);
       try {

@@ -85,8 +85,9 @@ export const adminOrderHandlers = [
     if (!order) return notFound(request);
 
     if (!(ALLOWED[order.status] ?? []).includes(body.status)) {
-      return apiError(request, 409, 'INVALID_STATUS_TRANSITION',
-        `An order that is ${order.status} cannot be moved to ${body.status}.`);
+            return apiError(request, 409, 'INVALID_STATUS_TRANSITION',
+        `Cannot change order status from ${order.status} to ${body.status}.`,
+        [{ field: 'status', message: `Allowed: [${(ALLOWED[order.status] ?? []).join(', ')}]` }]);
     }
 
     if (body.status === 'CANCELLED') {
