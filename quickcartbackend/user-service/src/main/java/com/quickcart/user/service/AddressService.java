@@ -30,20 +30,20 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public List<AddressResponse> list(long userId) {                               // U5, default first
+    public List<AddressResponse> list(long userId) {
         return addressRepository.findByUserIdOrderByDefaultAddressDescIdAsc(userId).stream()
                 .map(mapper::toResponse).toList();
     }
 
     @Transactional
-    public AddressResponse create(long userId, AddressRequest req) {               // U6
+    public AddressResponse create(long userId, AddressRequest req) {
         lockUser(userId);
         long count = addressRepository.countByUserId(userId);
         if (count >= MAX_ADDRESSES) {
             throw new ApiException(HttpStatus.CONFLICT, "ADDRESS_LIMIT_REACHED",
                     "You can save at most " + MAX_ADDRESSES + " addresses.");
         }
-        boolean makeDefault = count == 0 || Boolean.TRUE.equals(req.isDefault());   // first one is always default
+        boolean makeDefault = count == 0 || Boolean.TRUE.equals(req.isDefault());
         if (makeDefault && count > 0) {
             addressRepository.clearDefaults(userId, Instant.now());
         }
@@ -54,12 +54,11 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressResponse update(long userId, long id, AddressRequest req) {      // U7
+    public AddressResponse update(long userId, long id, AddressRequest req) {
         lockUser(userId);
         Address address = find(userId, id);
         address.update(req.label().trim(), req.recipientName().trim(), req.phone(), req.line1().trim(),
                 blankToNull(req.line2()), req.city().trim(), req.state().trim(), req.pincode());
-        // isDefault=true moves the default here; isDefault=false on the current default is ignored (see notes)
         if (Boolean.TRUE.equals(req.isDefault()) && !address.isDefaultAddress()) {
             addressRepository.clearDefaults(userId, Instant.now());
             address.setDefaultAddress(true);
@@ -68,19 +67,18 @@ public class AddressService {
     }
 
     @Transactional
-    public void delete(long userId, long id) {                                     // U8
+    public void delete(long userId, long id) {
         lockUser(userId);
         Address address = find(userId, id);
         boolean wasDefault = address.isDefaultAddress();
         addressRepository.delete(address);
         addressRepository.flush();
-        if (wasDefault) {                                                          // keep a default while any address exists
+        if (wasDefault) {
             addressRepository.findFirstByUserIdOrderByIdAsc(userId)
                     .ifPresent(next -> next.setDefaultAddress(true));
         }
     }
 
-    // another user's address is indistinguishable from a missing one (Section 8.3)
     private Address find(long userId, long id) {
         return addressRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "NOT_FOUND", "Address not found."));
